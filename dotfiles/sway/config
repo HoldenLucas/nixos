@@ -1,0 +1,160 @@
+font pango:Iosevka Term 14
+
+gaps inner 2
+gaps outer 0
+
+smart_gaps on
+
+default_border pixel 0
+default_floating_border pixel 0
+
+hide_edge_borders smart
+
+# class                 border  bground text    indicator child_border
+client.focused          #EEEEEE #EEEEEE #444444 #444444   #EEEEEE
+client.focused_inactive #DDDDDD #DDDDDD #444444 #444444   #444444
+client.unfocused        #BBBBBB #BBBBBB #444444 #BBBBBB   #BBBBBB
+client.urgent           #CB1ED1 #CB1ED1 #FFFFFF #CB1ED1   #CB1ED1
+client.placeholder      #000000 #0C0C0C #FFFFFF #000000   #0C0C0C
+
+client.background       #EEEEEE
+
+set $mod Mod4
+
+# start a terminal
+bindsym $mod+minus exec kitty
+
+# kill focused window
+bindsym $mod+Shift+q kill
+
+bindsym $mod+space exec rofi -show run
+
+# change focus
+bindsym $mod+n focus left
+bindsym $mod+e focus down
+bindsym $mod+i focus up
+bindsym $mod+o focus right
+
+# move focused window
+bindsym $mod+Shift+n move left
+bindsym $mod+Shift+e move down
+bindsym $mod+Shift+i move up
+bindsym $mod+Shift+o move right
+
+# split in horizontal orientation
+bindsym $mod+h split h
+
+# split in vertical orientation
+bindsym $mod+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $mod+t fullscreen toggle
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $mod+r layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+f layout toggle split
+
+# toggle tiling / floating
+bindsym $mod+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $mod+d focus mode_toggle
+
+# focus the parent container
+bindsym $mod+a focus parent
+
+# focus the child container
+#bindsym $mod+d focus child
+
+# switch to workspace
+bindsym $mod+Return workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+
+
+# move focused container to workspace
+bindsym $mod+Shift+Return workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+
+# reload the configuration file
+bindsym $mod+Shift+c reload
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $mod+Shift+p restart
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+f exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# resize window (you can also use the mouse for that)
+mode "resize" {
+        # These bindings trigger as soon as you enter the resize mode
+
+        bindsym n resize shrink width 10 px or 10 ppt
+        bindsym e resize grow height 10 px or 10 ppt
+        bindsym i resize shrink height 10 px or 10 ppt
+        bindsym o resize grow width 10 px or 10 ppt
+
+        # same bindings, but for the arrow keys
+        bindsym Left resize shrink width 10 px or 10 ppt
+        bindsym Down resize grow height 10 px or 10 ppt
+        bindsym Up resize shrink height 10 px or 10 ppt
+        bindsym Right resize grow width 10 px or 10 ppt
+
+        # back to normal: Enter or Escape
+        bindsym Return mode "default"
+        bindsym Caps_Lock mode "default"
+}
+
+bindsym $mod+p mode "resize"
+
+focus_follows_mouse no
+no_focus [window_role="pop-up"]
+
+title_align center
+
+#exec python /home/holden/.config/inactive-window-transparency.py
+#exec redshift -o 3000
+
+exec kitty --title='scratch'
+for_window [app_id="kitty" title="scratch"] move window to workspace 1
+
+#disable mouse wheel scroll on tabs
+bindsym button4 nop
+bindsym button5 nop
+
+# function keys
+
+bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+bindsym XF86AudioPlay exec playerctl play-pause
+bindsym XF86AudioNext exec playerctl next
+bindsym XF86AudioPrev exec playerctl previous
+
+#resize
+bindsym $mod+Ctrl+Right resize shrink width 1 px or 1 ppt
+bindsym $mod+Ctrl+Up resize grow height 1 px or 1 ppt
+bindsym $mod+Ctrl+Down resize shrink height 1 px or 1 ppt
+bindsym $mod+Ctrl+Left resize grow width 1 px or 1 ppt
+
+input * {
+  xkb_layout "us"
+  xkb_variant "colemak"
+  xkb_options "ctrl:nocaps"
+  repeat_delay 250
+  repeat_rate 25
+	natural_scroll enabled
+}
+
+#output "*" bg /home/holden/.config/lidar_cloud.png fill
+
+workspace_auto_back_and_forth yes
+
+bindsym $mod+x move workspace to output right
+
+# vim: set ft=i3config:
