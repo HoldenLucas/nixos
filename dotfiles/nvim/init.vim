@@ -13,7 +13,6 @@ augroup vimrcQfClose
 augroup END
 
 let mapleader=" "
-let g:vimwiki_list = [{'path': '$HOME/holdenlucas.github.io/vimwiki'}]
 
 let g:sneak#s_next = 1
 let g:sneak#label = 1
@@ -35,13 +34,15 @@ set updatetime=300
 nmap <Leader>t :GFiles --cached --others --exclude-standard<CR>
 nmap ; :Buffers<CR>
 " run selection or file in Python interpreter, respectively
-xnoremap <leader>p :w !python<cr>
-nnoremap <leader>p :w !python<cr>
-"disable search highlighting with esc
+" xnoremap <leader>p :w !python<cr>
+" nnoremap <leader>p :w !python<cr>
+" same with node
+nnoremap <leader>p :w !node<cr>
+" disable search highlighting with esc
 nnoremap <silent> <esc> :noh<cr><esc>
 " exit insert mode in the terminal with esc
 tnoremap <Esc> <C-\><C-n>
-" " prettier file
+" prettier file
 nmap <Leader>p :CocCommand prettier.formatFile<CR>
 autocmd FileType svelte nmap <buffer> <Leader>p :call CocAction('format')<CR>
 

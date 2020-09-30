@@ -115,17 +115,17 @@ no_focus [window_role="pop-up"]
 title_align center
 
 #exec python /home/holden/.config/inactive-window-transparency.py
-#exec redshift -o 3000
+exec gammastep -O 3000
 
-exec kitty --title='scratch'
-for_window [app_id="kitty" title="scratch"] move window to workspace 1
+# exec mako --config /etc/nixos/dotfiles/mako/config
+
+exec kitty
 
 #disable mouse wheel scroll on tabs
 bindsym button4 nop
 bindsym button5 nop
 
 # function keys
-
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
 bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
@@ -149,6 +149,7 @@ input * {
   repeat_delay 250
   repeat_rate 25
 	natural_scroll enabled
+	scroll_factor .3
 }
 
 #output "*" bg /home/holden/.config/lidar_cloud.png fill

@@ -23,7 +23,6 @@
           vim-polyglot
           fzf-vim
           fzfWrapper
-          vimwiki
           tcomment_vim
         ];
         ## manually loadable by calling `:packadd $plugin-name`
