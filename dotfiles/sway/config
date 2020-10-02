@@ -109,12 +109,11 @@ mode "resize" {
 
 bindsym $mod+p mode "resize"
 
-focus_follows_mouse no
+# focus_follows_mouse no
 no_focus [window_role="pop-up"]
 
 title_align center
 
-#exec python /home/holden/.config/inactive-window-transparency.py
 exec gammastep -O 3000
 
 # exec mako --config /etc/nixos/dotfiles/mako/config
@@ -149,7 +148,7 @@ input * {
   repeat_delay 250
   repeat_rate 25
 	natural_scroll enabled
-	scroll_factor .3
+	scroll_factor .5
 }
 
 #output "*" bg /home/holden/.config/lidar_cloud.png fill

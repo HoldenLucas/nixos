@@ -8,7 +8,7 @@
       vimAlias = true;
       withNodeJs = true;
 
-      configure.customRC = builtins.readFile ./dotfiles/nvim/init.vim;
+      configure.customRC = builtins.readFile ../dotfiles/nvim/init.vim;
 
       configure.packages.myNvimPackage = with pkgs.vimPlugins; {
         # loaded on launch
@@ -23,6 +23,7 @@
           vim-polyglot
           fzf-vim
           fzfWrapper
+          vimwiki
           tcomment_vim
         ];
         ## manually loadable by calling `:packadd $plugin-name`

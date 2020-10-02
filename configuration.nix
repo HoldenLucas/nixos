@@ -7,10 +7,12 @@ let
 in
 {
   imports =
-    [ # Include the results of the hardware scan.
+    [
       ./hardware-configuration.nix
       <nixos-hardware/lenovo/thinkpad/x1/6th-gen>
-      ./vim.nix
+      (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
+      ./modules/nvim.nix
+      ./modules/mako.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -47,6 +49,13 @@ in
   # };
 
   time.timeZone = "America/New_York";
+
+   nix = {
+    package = pkgs.nixUnstable;
+    extraOptions = ''
+      experimental-features = nix-command flakes
+    '';
+   };
 
   nixpkgs = {
     config.allowUnfree = true;
@@ -180,7 +189,6 @@ in
           text = ''
             #! ${pkgs.bash}/bin/bash
             charge=$(cat /sys/class/power_supply/BAT0/capacity)
-
             if [ "$charge" -lt 100 ]
             then
               # see https://releases.nixos.org/nix-dev/2015-December/019018.html
