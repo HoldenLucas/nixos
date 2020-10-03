@@ -1,22 +1,17 @@
 { pkgs, lib, config, ... }:
 let
-  thm = config.themes.colors;
-  # apps = config.defaultApplications;
+  # thm = config.themes.colors;
   # lock_fork = pkgs.writeShellScript "lock_fork" "sudo /run/current-system/sw/bin/lock &";
   # lock = pkgs.writeShellScript "lock" "swaymsg 'output * dpms off'; sudo /run/current-system/sw/bin/lock; swaymsg 'output * dpms on'";
 in {
-  environment.sessionVariables._JAVA_AWT_WM_NONREPARENTING = "1";
-
-  programs.sway.wrapperFeatures.gtk = true;
-
-  programs.sway.extraPackages = lib.mkForce (with pkgs; [ swayidle xwayland ]);
-
   home-manager.users.holden.wayland.windowManager.sway = {
     enable = true;
 
     config = rec {
-      # assigns = {
-      #   "" = [ { class = "Chromium"; } { app_id = "firefox"; } { class = "Firefox"; } ];
+      fonts = [ "Iosevka Term 16" ];
+
+      assigns = {
+        "2: web" = [ { class = "Chromium"; } { app_id = "firefox"; } { class = "Firefox"; } ];
       #   "" = [
       #     { app_id = "org.kde.trojita"; }
       #     { title = ".* - Sylpheed.*"; }
@@ -25,37 +20,35 @@ in {
       #     { title = "Slack"; }
       #   ];
       #   "ﱘ" = [{ app_id = "cantata"; }];
-      # };
+      };
 
-      fonts = [ "Iosevka Term 14" ];
+      bars = [ ];
 
-      # bars = [ ];
-
-      # colors = rec {
-      #   background = thm.bg;
-      #   unfocused = {
-      #     text = thm.alt;
-      #     border = thm.dark;
-      #     background = thm.bg;
-      #     childBorder = thm.dark;
-      #     indicator = thm.fg;
-      #   };
-      #   focusedInactive = unfocused;
-      #   urgent = unfocused // {
-      #     text = thm.fg;
-      #     border = thm.orange;
-      #     childBorder = thm.orange;
-      #   };
-      #   focused = unfocused // {
-      #     childBorder = thm.blue;
-      #     border = thm.blue;
-      #     background = thm.dark;
-      #     text = thm.fg;
-      #   };
-      # };
+      colors = rec {
+        background = "#EEEEEE";
+        # unfocused = {
+        #   text = thm.alt;
+        #   border = thm.dark;
+        #   background = thm.bg;
+        #   childBorder = thm.dark;
+        #   indicator = thm.fg;
+        # };
+        # focusedInactive = unfocused;
+        # urgent = unfocused // {
+        #   text = thm.fg;
+        #   border = thm.orange;
+        #   childBorder = thm.orange;
+        # };
+        # focused = unfocused // {
+        #   childBorder = thm.blue;
+        #   border = thm.blue;
+        #   background = thm.dark;
+        #   text = thm.fg;
+        # };
+      };
 
       gaps = {
-        inner = 6;
+        inner = 2;
         smartGaps = true;
         smartBorders = "on";
       };
@@ -65,20 +58,8 @@ in {
       modifier = "Mod4";
 
       window = {
-        border = 1;
+        border = 2;
         hideEdgeBorders = "smart";
-
-        titlebar = true;
-        commands = [
-          {
-            command = "border pixel 2px";
-            criteria = { window_role = "popup"; };
-          }
-          {
-            command = "sticky enable";
-            criteria = { floating = ""; };
-          }
-        ];
       };
 
       startup = [
@@ -101,6 +82,8 @@ in {
         # {
         #   command = "swayidle -w before-sleep '${lock_fork}' lock '${lock_fork}' unlock 'pkill -9 swaylock'";
         # }
+        { command = "gammastep -O 3000"; }
+        { command = "kitty"; }
       ];
 
       keybindings = let
@@ -114,8 +97,29 @@ in {
                 mousemove \
                 $((X+WIDTH/2)) $((Y+HEIGHT/2))'"'';
       in ({
-      #   "${modifier}+q" = "kill";
-      #   "${modifier}+Return" = "exec ${apps.term.cmd}";
+        "${modifier}+Shift+q" = "kill";
+        "${modifier}+minus" = "exec kitty";
+
+        "${modifier}+f" = "exec firefox";
+
+        "${modifier}+n" = "focus left";
+        "${modifier}+e" = "focus down";
+        "${modifier}+i" = "focus up";
+        "${modifier}+o" = "focus right";
+        "${modifier}+Shift+n" = "move left";
+        "${modifier}+Shift+e" = "move down";
+        "${modifier}+Shift+i" = "move up";
+        "${modifier}+Shift+o" = "move right";
+
+        "${modifier}+Return" = "workspace 0";
+        "${modifier}+2" = "workspace 2";
+        "${modifier}+3" = "workspace 3";
+        "${modifier}+4" = "workspace 4";
+        "${modifier}+Shift+Return" = "move container to workspace 0";
+        "${modifier}+Shift+2" = "move container to workspace 2";
+        "${modifier}+Shift+3" = "move container to workspace 3";
+        "${modifier}+Shift+4" = "move container to workspace 4";
+
       #   "${modifier}+e" = "exec ${apps.editor.cmd}";
       #   "${modifier}+l" = "layout toggle all";
       #
@@ -206,22 +210,24 @@ in {
       workspaceAutoBackAndForth = true;
     };
 
-    wrapperFeatures = {
-      gtk = true;
-    };
-
     extraConfig = ''
-    #   output * bg ${thm.bg} solid_color
-    #   input 2:14:ETPS/2_Elantech_Touchpad {
-    #     tap enabled
-    #     natural_scroll enabled
-    #     dwt enabled
-    #   }
-    #   input 2:14:ETPS/2_Elantech_TrackPoint pointer_accel -0.7
-    #   default_border pixel 1
-    #   mouse_warping container
-
-    #   exec pkill swaynag
+      input 1:1:AT_Translated_Set_2_keyboard {
+        xkb_layout "us"
+        xkb_variant "colemak"
+        xkb_options "ctrl:nocaps"
+        repeat_delay 250
+        repeat_rate 25
+      }
+      input 2:10:TPPS/2_Elan_TrackPoint {
+        dwt enabled # disable-while-typing
+        tap disabled
+        # scroll_factor .5
+        pointer_accel -0.7
+      }
+      input * {
+        natural_scroll enabled
+      }
+      # output "*" bg /home/holden/.config/lidar_cloud.png fill
     '';
   };
 }

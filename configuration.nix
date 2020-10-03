@@ -4,8 +4,7 @@ let
   unstableTarball =
     fetchTarball
       https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz;
-in
-{
+in {
   imports =
     [
       ./hardware-configuration.nix
@@ -13,6 +12,11 @@ in
       (import "${builtins.fetchTarball https://github.com/rycee/home-manager/archive/master.tar.gz}/nixos")
       ./modules/nvim.nix
       ./modules/mako.nix
+      ./modules/user.nix
+      ./modules/kitty.nix
+      ./modules/fish.nix
+      ./modules/fonts.nix
+      ./modules/sway.nix
     ];
 
   # Use the systemd-boot EFI boot loader.
@@ -65,22 +69,6 @@ in
       unstable = import unstableTarball {
         config = config.nixpkgs.config;
       };
-      iosevka-term = pkgs.iosevka.override {
-        set = "term";
-        privateBuildPlan = {
-          family = "Iosevka Term";
-          design = [
-              "sp-fixed"
-              "v-l-italic"
-              "v-i-italic"
-              "v-g-singlestorey"
-              "v-zero-dotted"
-              "v-asterisk-high"
-              "v-at-long"
-              "v-brace-straight"
-          ];
-        };
-      };
     };
   };
 
@@ -110,16 +98,8 @@ in
     tlp.enable = true;
   };
 
-  users.users.holden = {
-    isNormalUser = true;
-    shell = pkgs.fish;
-    extraGroups = [ "wheel" "networkmanager" ];
-    home = "/home/holden";
-    hashedPassword = "$6$xmWOpHL.z6z6$b/Z0ooWQxt/aaWWKSwbs7.CEHGPmT.KRgJA1dVcPRATCZbY9gKzprFev/dGUZ8sPczkTCN4uVGvTqq1jeM1kB.";
-  };
-
-
-  users.mutableUsers = false;
+  programs.sway.extraPackages = with pkgs; [
+  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
@@ -128,28 +108,6 @@ in
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "20.03"; # Did you read the comment?
-
-  programs = {
-    sway = {
-      enable = true;
-      extraPackages = with pkgs; [
-        wl-clipboard # clipboard
-        swayidle
-        xwayland # for legacy x apps
-        mako # notification daemon
-
-        kitty
-        #firefox
-        firefox-wayland
-        chromium
-        rofi
-        brightnessctl
-        #gammastep
-      ];
-    };
-
-    fish.enable = true;
-  };
 
   environment = {
     systemPackages = with pkgs; [
@@ -161,7 +119,6 @@ in
       nodejs
       fzf
       lm_sensors
-      postgresql
       lesspass-cli
       docker-compose
       nmap
@@ -169,18 +126,14 @@ in
       libnotify
       httpie
       sublime-merge
-      (
-        pkgs.writeTextFile {
-          name = "startsway";
-          destination = "/bin/startsway";
-          executable = true;
-          text = ''
-            #! ${pkgs.bash}/bin/bash
-            systemctl --user import-environment
-            exec systemctl --user start sway.service
-          '';
-        }
-      )
+
+      swayidle
+      xwayland
+      wl-clipboard
+      firefox-wayland
+      brightnessctl
+      # add gammastep once upgraded to unstable
+      #gammastep
       (
         pkgs.writeTextFile {
           name = "batterynotify";
@@ -201,27 +154,12 @@ in
     ];
 
     etc = {
-      "sway/config".source = ./dotfiles/sway/config;
-      "kitty/kitty.conf".source = ./dotfiles/kitty/kitty.conf;
       "xdg/nvim/sysinit.vim".source = ./dotfiles/nvim/init.vim;
       "fish/functions/fisher.fish".source = ./dotfiles/fish/fisher.fish;
-    };
-    variables = {
-      KITTY_CONFIG_DIRECTORY="/etc/kitty";
-      ZDOTDIR="/etc/nixos/dotfiles/zsh/";
-      XDG_DESKTOP_DIR="$HOME/";
     };
   };
 
   systemd = {
-    user.targets.sway-session = {
-      description = "Sway compositor session";
-      documentation = [ "man:systemd.special(7)" ];
-      bindsTo = [ "graphical-session.target" ];
-      wants = ["graphical-session-pre.target"];
-      after = ["graphical-session-pre.target"];
-    };
-
     services.batterynotify = rec {
       description = "Run batterynotify (${startAt})";
       startAt = "minutely";
@@ -230,45 +168,7 @@ in
         ExecStart = "/run/current-system/sw/bin/batterynotify";
       };
     };
-
-    user.services = {
-      sway = {
-        description = "Sway - Wayland window manager";
-        documentation = ["man:sway(5)"];
-        bindsTo = [ "graphical-session.target" ];
-        wants = ["graphical-session-pre.target"];
-        after = ["graphical-session-pre.target"];
-        environment.PATH = lib.mkForce null;
-        serviceConfig = {
-          Type = "simple";
-          ExecStart = ''
-            ${pkgs.dbus}/bin/dbus-run-session ${pkgs.sway}/bin/sway --debug
-          '';
-          Restart = "on-failure";
-          RestartSec = 1;
-          TimeoutStopSec = 10;
-        };
-      };
-
-      # see https://releases.nixos.org/nix-dev/2016-February/019620.html
-      # to explain systemd timers
-
-      #batterynotify = rec {
-      #  description = "Run batterynotify (${startAt})";
-      #  startAt = "minutely";
-
-      #  serviceConfig = {
-      #    ExecStart = "/run/current-system/sw/bin/batterynotify";
-      #  };
-      #};
-    };
-
   };
 
   virtualisation.docker.enable = true;
-
-  fonts.fonts = with pkgs; [
-    #unstable.iosevka
-    iosevka-term
-  ];
 }

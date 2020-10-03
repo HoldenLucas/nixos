@@ -17,7 +17,7 @@
   services.mingetty.autologinUser = "holden";
 
   environment.loginShellInit = ''
-    [[ "$(tty)" == /dev/tty1 ]] && sway
+    [[ "$(tty)" == /dev/tty1 ]] && startsway
   '';
 
   security.sudo = {
@@ -29,5 +29,4 @@
       balsoft ALL = (root) NOPASSWD: ${pkgs.light}/bin/light -U 5
     '';
   };
-  home-manager.useUserPackages = true;
 }

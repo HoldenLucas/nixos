@@ -3,7 +3,7 @@
   home-manager.users.holden.programs.mako = {
     enable = true;
 
-    font = "Iosevka Term 18";
+    font = "Iosevka Term 14";
     layer = "overlay";
     #anchor = "top-center";
     margin = "25";
