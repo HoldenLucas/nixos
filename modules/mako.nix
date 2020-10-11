@@ -5,15 +5,14 @@
 
     font = "Iosevka Term 14";
     layer = "overlay";
-    #anchor = "top-center";
+    anchor = "bottom-right";
     margin = "25";
-    defaultTimeout = 6000;
+    defaultTimeout = 5000;
     borderSize = 10;
     ignoreTimeout = true;
 
-    # width = 500;
-    # height = 80;
-    # defaultTimeout = 10000;
+    width = 500;
+    height = 80;
     # maxVisible = 10;
     # backgroundColor = config.themes.colors.bg;
     # textColor = config.themes.colors.fg;

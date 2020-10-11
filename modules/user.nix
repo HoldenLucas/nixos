@@ -16,17 +16,7 @@
 
   services.mingetty.autologinUser = "holden";
 
-  environment.loginShellInit = ''
-    [[ "$(tty)" == /dev/tty1 ]] && startsway
-  '';
-
   security.sudo = {
     enable = true;
-    extraConfig = ''
-      balsoft ALL = (root) NOPASSWD: /run/current-system/sw/bin/lock
-      balsoft ALL = (root) NOPASSWD: /run/current-system/sw/bin/lock this
-      balsoft ALL = (root) NOPASSWD: ${pkgs.light}/bin/light -A 5
-      balsoft ALL = (root) NOPASSWD: ${pkgs.light}/bin/light -U 5
-    '';
   };
 }

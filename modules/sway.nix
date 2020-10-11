@@ -11,18 +11,18 @@ in {
       fonts = [ "Iosevka Term 16" ];
 
       assigns = {
-        "2: web" = [ { class = "Chromium"; } { app_id = "firefox"; } { class = "Firefox"; } ];
-      #   "" = [
-      #     { app_id = "org.kde.trojita"; }
-      #     { title = ".* - Sylpheed.*"; }
-      #     { title = "balsoft : weechat.*"; }
-      #     { title = "nheko"; }
-      #     { title = "Slack"; }
-      #   ];
-      #   "ﱘ" = [{ app_id = "cantata"; }];
+        "2" = [
+          { class = "Chromium"; }
+          { app_id = "firefox"; }
+          { class = "Firefox"; }
+        ];
       };
 
-      bars = [ ];
+      bars = [{
+        fonts = [ "FontAwesome 10" "Iosevka Term 14" ];
+        mode = "hide";
+        position = "top";
+      }];
 
       colors = rec {
         background = "#EEEEEE";
@@ -83,20 +83,17 @@ in {
         #   command = "swayidle -w before-sleep '${lock_fork}' lock '${lock_fork}' unlock 'pkill -9 swaylock'";
         # }
         { command = "gammastep -O 3000"; }
-        { command = "kitty"; }
       ];
 
       keybindings = let
-        script = name: content: "exec ${pkgs.writeScript name content}";
-        workspaces = (builtins.genList (x: [ (toString x) (toString x) ]) 10)
-          ++ [ [ "c" "" ] [ "t" "" ] [ "m" "ﱘ" ] ];
-        moveMouse = ''
-          exec "sh -c 'eval `${pkgs.xdotool}/bin/xdotool \
-                getactivewindow \
-                getwindowgeometry --shell`; ${pkgs.xdotool}/bin/xdotool \
-                mousemove \
-                $((X+WIDTH/2)) $((Y+HEIGHT/2))'"'';
-      in ({
+        # script = name: content: "exec ${pkgs.writeScript name content}";
+        # moveMouse = ''
+        #   exec "sh -c 'eval `${pkgs.xdotool}/bin/xdotool \
+        #         getactivewindow \
+        #         getwindowgeometry --shell`; ${pkgs.xdotool}/bin/xdotool \
+        #         mousemove \
+        #         $((X+WIDTH/2)) $((Y+HEIGHT/2))'"'';
+      in {
         "${modifier}+Shift+q" = "kill";
         "${modifier}+minus" = "exec kitty";
 
@@ -120,86 +117,82 @@ in {
         "${modifier}+Shift+3" = "move container to workspace 3";
         "${modifier}+Shift+4" = "move container to workspace 4";
 
-      #   "${modifier}+e" = "exec ${apps.editor.cmd}";
-      #   "${modifier}+l" = "layout toggle all";
-      #
-      #   "${modifier}+Left" = "focus child; focus left; ${moveMouse}";
-      #   "${modifier}+Right" = "focus child; focus right; ${moveMouse}";
-      #   "${modifier}+Up" = "focus child; focus up; ${moveMouse}";
-      #   "${modifier}+Down" = "focus child; focus down; ${moveMouse}";
-      #   "${modifier}+Control+Left" = "focus parent; focus left; ${moveMouse}";
-      #   "${modifier}+Control+Right" = "focus parent; focus right; ${moveMouse}";
-      #   "${modifier}+Control+Up" = "focus parent; focus up; ${moveMouse}";
-      #   "${modifier}+Control+Down" = "focus parent; focus down; ${moveMouse}";
-      #   "${modifier}+Shift+Up" = "move up";
-      #   "${modifier}+Shift+Down" = "move down";
-      #   "${modifier}+Shift+Right" = "move right";
-      #   "${modifier}+Shift+Left" = "move left";
-      #
-      #   "${modifier}+a" = "focus child; focus left; ${moveMouse}";
-      #   "${modifier}+d" = "focus child; focus right; ${moveMouse}";
-      #   "${modifier}+w" = "focus child; focus up; ${moveMouse}";
-      #   "${modifier}+s" = "focus child; focus down; ${moveMouse}";
-      #   "${modifier}+Control+a" = "focus parent; focus left; ${moveMouse}";
-      #   "${modifier}+Control+d" = "focus parent; focus right; ${moveMouse}";
-      #   "${modifier}+Control+w" = "focus parent; focus up; ${moveMouse}";
-      #   "${modifier}+Control+s" = "focus parent; focus down; ${moveMouse}";
-      #   "${modifier}+Shift+w" = "move up";
-      #   "${modifier}+Shift+s" = "move down";
-      #   "${modifier}+Shift+d" = "move right";
-      #   "${modifier}+Shift+a" = "move left";
-      #
-      #   "${modifier}+f" = "fullscreen toggle; floating toggle";
-      #   "${modifier}+r" = "mode resize";
-      #   "${modifier}+Shift+f" = "floating toggle";
-      #
-      #   "${modifier}+j" = "focus mode_toggle";
-      #   "${modifier}+Escape" = "exec ${apps.monitor.cmd}";
-      #
-      #   "${modifier}+Print" = script "screenshot"
-      #     "${pkgs.grim}/bin/grim Pictures/$(date +'%Y-%m-%d+%H:%M:%S').png";
-      #
-      #   "${modifier}+Control+Print" = script "screenshot-copy"
-      #     "${pkgs.grim}/bin/grim - | ${pkgs.wl-clipboard}/bin/wl-copy";
-      #
-      #   "--release ${modifier}+Shift+Print" = script "screenshot-area" ''
-      #     ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" Pictures/$(date +'%Y-%m-%d+%H:%M:%S').png'';
-      #
-      #   "--release ${modifier}+Control+Shift+Print" =
-      #     script "screenshot-area-copy" ''
-      #       ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy'';
-      #
-      #   "${modifier}+x" = "move workspace to output right";
-      #   "${modifier}+k" = "exec '${pkgs.xorg.xkill}/bin/xkill'";
-      #   "${modifier}+F5" = "reload";
-      #   "${modifier}+Shift+F5" = "exit";
-      #   "${modifier}+Shift+h" = "layout splith";
-      #   "${modifier}+Shift+v" = "layout splitv";
-      #   "${modifier}+h" = "split h";
-      #   "${modifier}+v" = "split v";
-      #   "${modifier}+F1" = "move to scratchpad";
-      #   "${modifier}+F2" = "scratchpad show";
-      #   "${modifier}+F11" = "output * dpms off";
-      #   "${modifier}+F12" = "output * dpms on";
-      #   "${modifier}+End" = "exec ${lock}";
-      #   "${modifier}+p" = "sticky toggle";
-      #   "${modifier}+i" =
-      #     script "0x0" ''wl-paste | curl -F"file=@-" https://0x0.st | wl-copy'';
-      #   "${modifier}+b" = "focus mode_toggle";
-      #   "${modifier}+z" = script "lambda-launcher"
-      #     "${pkgs.lambda-launcher}/bin/lambda-launcher";
-      #   "XF86AudioPlay" = "exec ${pkgs.playerctl}/bin/playerctl play-pause";
-      #   "XF86AudioNext" = "exec ${pkgs.playerctl}/bin/playerctl next";
-      #   "XF86AudioPrev" = "exec ${pkgs.playerctl}/bin/playerctl previous";
-      #   "button2" = "kill";
-      #   "--whole-window ${modifier}+button2" = "kill";
-      } // builtins.listToAttrs (builtins.map (x: {
-        name = "${modifier}+${builtins.elemAt x 0}";
-        value = "workspace ${builtins.elemAt x 1}";
-      }) workspaces) // builtins.listToAttrs (builtins.map (x: {
-        name = "${modifier}+Shift+${builtins.elemAt x 0}";
-        value = "move container to workspace ${builtins.elemAt x 1}";
-      }) workspaces));
+        "${modifier}+t" = "fullscreen toggle";
+
+        #   "${modifier}+e" = "exec ${apps.editor.cmd}";
+        #   "${modifier}+l" = "layout toggle all";
+        #
+        #   "${modifier}+Left" = "focus child; focus left; ${moveMouse}";
+        #   "${modifier}+Right" = "focus child; focus right; ${moveMouse}";
+        #   "${modifier}+Up" = "focus child; focus up; ${moveMouse}";
+        #   "${modifier}+Down" = "focus child; focus down; ${moveMouse}";
+        #   "${modifier}+Control+Left" = "focus parent; focus left; ${moveMouse}";
+        #   "${modifier}+Control+Right" = "focus parent; focus right; ${moveMouse}";
+        #   "${modifier}+Control+Up" = "focus parent; focus up; ${moveMouse}";
+        #   "${modifier}+Control+Down" = "focus parent; focus down; ${moveMouse}";
+        #   "${modifier}+Shift+Up" = "move up";
+        #   "${modifier}+Shift+Down" = "move down";
+        #   "${modifier}+Shift+Right" = "move right";
+        #   "${modifier}+Shift+Left" = "move left";
+        #
+        #   "${modifier}+a" = "focus child; focus left; ${moveMouse}";
+        #   "${modifier}+d" = "focus child; focus right; ${moveMouse}";
+        #   "${modifier}+w" = "focus child; focus up; ${moveMouse}";
+        #   "${modifier}+s" = "focus child; focus down; ${moveMouse}";
+        #   "${modifier}+Control+a" = "focus parent; focus left; ${moveMouse}";
+        #   "${modifier}+Control+d" = "focus parent; focus right; ${moveMouse}";
+        #   "${modifier}+Control+w" = "focus parent; focus up; ${moveMouse}";
+        #   "${modifier}+Control+s" = "focus parent; focus down; ${moveMouse}";
+        #   "${modifier}+Shift+w" = "move up";
+        #   "${modifier}+Shift+s" = "move down";
+        #   "${modifier}+Shift+d" = "move right";
+        #   "${modifier}+Shift+a" = "move left";
+        #
+        #   "${modifier}+f" = "fullscreen toggle; floating toggle";
+        #   "${modifier}+r" = "mode resize";
+        #   "${modifier}+Shift+f" = "floating toggle";
+        #
+        #   "${modifier}+j" = "focus mode_toggle";
+        #   "${modifier}+Escape" = "exec ${apps.monitor.cmd}";
+        #
+        #   "${modifier}+Print" = script "screenshot"
+        #     "${pkgs.grim}/bin/grim Pictures/$(date +'%Y-%m-%d+%H:%M:%S').png";
+        #
+        #   "${modifier}+Control+Print" = script "screenshot-copy"
+        #     "${pkgs.grim}/bin/grim - | ${pkgs.wl-clipboard}/bin/wl-copy";
+        #
+        #   "--release ${modifier}+Shift+Print" = script "screenshot-area" ''
+        #     ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" Pictures/$(date +'%Y-%m-%d+%H:%M:%S').png'';
+        #
+        #   "--release ${modifier}+Control+Shift+Print" =
+        #     script "screenshot-area-copy" ''
+        #       ${pkgs.grim}/bin/grim -g "$(${pkgs.slurp}/bin/slurp)" - | ${pkgs.wl-clipboard}/bin/wl-copy'';
+        #
+        #   "${modifier}+x" = "move workspace to output right";
+        #   "${modifier}+k" = "exec '${pkgs.xorg.xkill}/bin/xkill'";
+        #   "${modifier}+F5" = "reload";
+        #   "${modifier}+Shift+F5" = "exit";
+        #   "${modifier}+Shift+h" = "layout splith";
+        #   "${modifier}+Shift+v" = "layout splitv";
+        #   "${modifier}+h" = "split h";
+        #   "${modifier}+v" = "split v";
+        #   "${modifier}+F1" = "move to scratchpad";
+        #   "${modifier}+F2" = "scratchpad show";
+        #   "${modifier}+F11" = "output * dpms off";
+        #   "${modifier}+F12" = "output * dpms on";
+        #   "${modifier}+End" = "exec ${lock}";
+        #   "${modifier}+p" = "sticky toggle";
+        #   "${modifier}+i" =
+        #     script "0x0" ''wl-paste | curl -F"file=@-" https://0x0.st | wl-copy'';
+        #   "${modifier}+b" = "focus mode_toggle";
+        #   "${modifier}+z" = script "lambda-launcher"
+        #     "${pkgs.lambda-launcher}/bin/lambda-launcher";
+        #   "XF86AudioPlay" = "exec ${pkgs.playerctl}/bin/playerctl play-pause";
+        #   "XF86AudioNext" = "exec ${pkgs.playerctl}/bin/playerctl next";
+        #   "XF86AudioPrev" = "exec ${pkgs.playerctl}/bin/playerctl previous";
+        #   "button2" = "kill";
+        #   "--whole-window ${modifier}+button2" = "kill";
+      };
       keycodebindings = {
         # "122" = "exec ${pkgs.pamixer}/bin/pamixer -d 2";
         # "123" = "exec ${pkgs.pamixer}/bin/pamixer -i 2";
@@ -231,3 +224,96 @@ in {
     '';
   };
 }
+
+################# old sway cfg
+# # class                 border  bground text    indicator child_border
+# client.focused          #EEEEEE #EEEEEE #444444 #444444   #EEEEEE
+# client.focused_inactive #DDDDDD #DDDDDD #444444 #444444   #444444
+# client.unfocused        #BBBBBB #BBBBBB #444444 #BBBBBB   #BBBBBB
+# client.urgent           #CB1ED1 #CB1ED1 #FFFFFF #CB1ED1   #CB1ED1
+# client.placeholder      #000000 #0C0C0C #FFFFFF #000000   #0C0C0C
+#
+# # split in horizontal orientation
+# bindsym $mod+h split h
+#
+# # split in vertical orientation
+# bindsym $mod+v split v
+#
+# # enter fullscreen mode for the focused container
+# bindsym $mod+t fullscreen toggle
+#
+# # change container layout (stacked, tabbed, toggle split)
+# bindsym $mod+r layout stacking
+# bindsym $mod+w layout tabbed
+# bindsym $mod+f layout toggle split
+#
+# # toggle tiling / floating
+# bindsym $mod+Shift+space floating toggle
+#
+# # change focus between tiling / floating windows
+# bindsym $mod+d focus mode_toggle
+#
+# # focus the parent container
+# bindsym $mod+a focus parent
+#
+# # focus the child container
+# #bindsym $mod+d focus child
+#
+# # reload the configuration file
+# bindsym $mod+Shift+c reload
+# # restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+# bindsym $mod+Shift+p restart
+# # exit i3 (logs you out of your X session)
+# bindsym $mod+Shift+f exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+#
+# # resize window (you can also use the mouse for that)
+# mode "resize" {
+#         # These bindings trigger as soon as you enter the resize mode
+#
+#         bindsym n resize shrink width 10 px or 10 ppt
+#         bindsym e resize grow height 10 px or 10 ppt
+#         bindsym i resize shrink height 10 px or 10 ppt
+#         bindsym o resize grow width 10 px or 10 ppt
+#
+#         # same bindings, but for the arrow keys
+#         bindsym Left resize shrink width 10 px or 10 ppt
+#         bindsym Down resize grow height 10 px or 10 ppt
+#         bindsym Up resize shrink height 10 px or 10 ppt
+#         bindsym Right resize grow width 10 px or 10 ppt
+#
+#         # back to normal: Enter or Escape
+#         bindsym Return mode "default"
+#         bindsym Caps_Lock mode "default"
+# }
+#
+# bindsym $mod+p mode "resize"
+#
+# # focus_follows_mouse no
+# no_focus [window_role="pop-up"]
+#
+# title_align center
+#
+# #disable mouse wheel scroll on tabs
+# bindsym button4 nop
+# bindsym button5 nop
+#
+# # function keys
+# bindsym XF86AudioRaiseVolume exec pactl set-sink-volume @DEFAULT_SINK@ +5%
+# bindsym XF86AudioLowerVolume exec pactl set-sink-volume @DEFAULT_SINK@ -5%
+# bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle
+# bindsym XF86AudioMicMute exec pactl set-source-mute @DEFAULT_SOURCE@ toggle
+# bindsym XF86MonBrightnessDown exec brightnessctl set 5%-
+# bindsym XF86MonBrightnessUp exec brightnessctl set +5%
+# bindsym XF86AudioPlay exec playerctl play-pause
+# bindsym XF86AudioNext exec playerctl next
+# bindsym XF86AudioPrev exec playerctl previous
+#
+# #resize
+# bindsym $mod+Ctrl+Right resize shrink width 1 px or 1 ppt
+# bindsym $mod+Ctrl+Up resize grow height 1 px or 1 ppt
+# bindsym $mod+Ctrl+Down resize shrink height 1 px or 1 ppt
+# bindsym $mod+Ctrl+Left resize grow width 1 px or 1 ppt
+#
+# #output "*" bg /home/holden/.config/lidar_cloud.png fill
+#
+# bindsym $mod+x move workspace to output right

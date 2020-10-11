@@ -4,8 +4,11 @@
     enable = true;
 
     settings = {
+      font_size = 15;
       font_family = "Iosevka Term";
-      font_size = 14;
+      bold_font = "Iosevka Term Bold";
+      italic_font = "Iosevka Term Italic";
+      bold_italic_font = "Iosevka Term Bold Italic";
 
       enable_audio_bell = false;
       scrollback_lines = 10000;

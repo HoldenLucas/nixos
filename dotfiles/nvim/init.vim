@@ -84,9 +84,14 @@ let g:lightline = {
       \ }
 
 
-let g:vimwiki_list = [{'path': '~/vimwiki/',
+let g:vimwiki_list = [{'path': '~/vimwiki/', 'links_space_char': '_',
                       \ 'syntax': 'markdown', 'ext': '.md'}]
 
 let g:vimwiki_global_ext = 0
 
 let g:vimwiki_markdown_link_ext = 1
+
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
