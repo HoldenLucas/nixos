@@ -1,4 +1,4 @@
-call plug#begin('~/.config/nvim/init.vim')
+call plug#begin(stdpath('data') . '/plugged')
 " syntax highlighting for many languages
 Plug 'sheerun/vim-polyglot'
 " for base16-grayscale-light colorscheme
