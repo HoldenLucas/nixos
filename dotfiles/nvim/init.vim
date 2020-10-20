@@ -11,12 +11,12 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'chrisbra/Recover.vim'
 " automatic file specific comments
 Plug 'tomtom/tcomment_vim'
-" md wiki
-" Plug 'vimwiki/vimwiki'
 " allows fuzzy searching (left in for posterity, managed separately in nix)
+" Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 " Plug 'junegunn/fzf.vim'
 " calls `filetype plugin indent on` and `syntax enable`
 call plug#end()
+
 """"""""""""
 """ misc """
 """"""""""""
@@ -32,7 +32,7 @@ set tabstop=2
 " sets the default indentation width in spaces (0 means use tabstop)
 set shiftwidth=0
 " show tabs as two spaces, and visualize other whitespace
-set list listchars=tab:\ \ ,trail:·,extends:>>,nbsp:·
+set list listchars=tab:\ \ ,trail:·,extends:#,nbsp:·
 " the number of lines always padded above/below the cursor
 set scrolloff=8
 " Always show signcolumns
@@ -102,16 +102,3 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-
-"""""""""""""""
-""" vimwiki """
-"""""""""""""""
-" let g:vimwiki_list = [{'path': '~/vimwiki/', 'links_space_char': '_',
-"                       \ 'syntax': 'markdown', 'ext': '.md'}]
-"
-" " prevent vimwiki from turning all md files into wikis
-" let g:vimwiki_global_ext = 0
-"
-" " add markdown style file links
-" let g:vimwiki_markdown_link_ext = 1
-
