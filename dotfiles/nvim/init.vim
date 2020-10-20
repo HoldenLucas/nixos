@@ -1,54 +1,98 @@
-set termguicolors
-set background=light
-
-filetype plugin indent on
-syntax enable
-let base16colorspace=256
-colorscheme base16-grayscale-light
-
-"close quickfix window with esc
-augroup vimrcQfClose
-    autocmd!
-    autocmd FileType qf if mapcheck('<esc>', 'n') ==# '' | nnoremap <buffer><silent> <esc> :cclose<bar>lclose<CR> | endif
-augroup END
-
+call plug#begin('~/.config/nvim/init.vim')
+" syntax highlighting for many languages
+Plug 'sheerun/vim-polyglot'
+" for base16-grayscale-light colorscheme
+Plug 'chriskempson/base16-vim'
+" adds highlighting for f/F and t/T movements
+Plug 'unblevable/quick-scope'
+" adds lsp and vscode plugin support
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" adds an option to show diff of recovered buffer
+Plug 'chrisbra/Recover.vim'
+" automatic file specific comments
+Plug 'tomtom/tcomment_vim'
+" md wiki
+Plug 'vimwiki/vimwiki'
+" allows fuzzy searching (left in for posterity, managed separately in nix)
+" Plug 'junegunn/fzf.vim'
+" calls `filetype plugin indent on` and `syntax enable`
+call plug#end()
+""""""""""""
+""" misc """
+""""""""""""
+" binds <Leader> to space
 let mapleader=" "
 
-let g:sneak#s_next = 1
-let g:sneak#label = 1
-
-set cursorline
-set shiftwidth=2
-set tabstop=2
+" allows hiding buffers instead of closing them
 set hidden
-set ignorecase
-" set list listchars=tab:>>,trail:·,extends:#,nbsp:·
-set list listchars=tab:\ \ ,trail:·,extends:#,nbsp:·
-set noshowmode
+" highlights the line containing the cursor
+set cursorline
+" sets the number of spaces inserted by a tab
+set tabstop=2
+" sets the default indentation width in spaces (0 means use tabstop)
+set shiftwidth=0
+" show whitespace
+set list listchars=tab:>>,trail:·,extends:#,nbsp:·
+" the number of lines always padded above/below the cursor
 set scrolloff=8
-set shortmess+=c
+" Always show signcolumns
 set signcolumn=yes
+" Don't show |ins-completion-menu| messages (coc)
+set shortmess+=c
+" ignore case during search
+set ignorecase
+" unless there is a capitalized letter
 set smartcase
-set updatetime=300
 
-nmap <Leader>t :GFiles --cached --others --exclude-standard<CR>
-nmap ; :Buffers<CR>
+" set noshowmode
+
+" break bad habits
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
+
 " run selection or file in Python interpreter, respectively
 " xnoremap <leader>p :w !python<cr>
 " nnoremap <leader>p :w !python<cr>
-" same with node
-nnoremap <leader>p :w !node<cr>
 " disable search highlighting with esc
 nnoremap <silent> <esc> :noh<cr><esc>
 " exit insert mode in the terminal with esc
 tnoremap <Esc> <C-\><C-n>
-" prettier file
-nmap <Leader>p :CocCommand prettier.formatFile<CR>
-autocmd FileType svelte nmap <buffer> <Leader>p :call CocAction('format')<CR>
+
+"""""""""""""""""""
+""" colorscheme """
+"""""""""""""""""""
+set background=light
+let base16colorspace=256
+
+" better quickscope colors for grayscale
+" must be set before colorscheme
+augroup qs_colors
+  autocmd!
+  autocmd ColorScheme * highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+  autocmd ColorScheme * highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
+augroup END
+
+colorscheme base16-grayscale-light
+
+""""""""""""""""""
+""" quickscope """
+""""""""""""""""""
+" Trigger a highlight in the appropriate direction when pressing these keys:
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+"""""""""""
+""" fzf """
+"""""""""""
+nmap <Leader>f :Files <CR>
+nmap <Leader>t :Buffers<CR>
 
 """"""""""""""""
 """ coc.nvim """
 """"""""""""""""
+let g:coc_global_extensions = ['coc-markdownlint']
+
 " Use tab for trigger completion with characters ahead and navigate.
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? "\<C-n>" :
@@ -61,37 +105,15 @@ function! s:check_back_space() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
-let g:lightline = {
-      \ 'colorscheme': 'one',
-      \ 'active': {
-      \   'left': [ [ 'cocstatus', 'readonly', 'filename', 'modified' ] ],
-      \   'right': [ [ 'lineinfo' ],
-      \            [ 'percent' ],
-      \            [ 'fileformat', 'fileencoding', 'filetype' ] ]
-      \ },
-      \ 'component_function': {
-      \   'cocstatus': 'coc#status'
-      \ },
-      \ }
-
-
+"""""""""""""""
+""" vimwiki """
+"""""""""""""""
 let g:vimwiki_list = [{'path': '~/vimwiki/', 'links_space_char': '_',
                       \ 'syntax': 'markdown', 'ext': '.md'}]
 
+" prevent vimwiki from turning all md files into wikis
 let g:vimwiki_global_ext = 0
 
+" add markdown style file links
 let g:vimwiki_markdown_link_ext = 1
 
-noremap <Up> <NOP>
-noremap <Down> <NOP>
-noremap <Left> <NOP>
-noremap <Right> <NOP>

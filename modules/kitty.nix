@@ -5,10 +5,10 @@
 
     settings = {
       font_size = 15;
-      font_family = "Iosevka Term";
-      bold_font = "Iosevka Term Bold";
-      italic_font = "Iosevka Term Italic";
-      bold_italic_font = "Iosevka Term Bold Italic";
+      font_family = "Iosevka Fixed";
+      bold_font = "Iosevka Fixed Bold";
+      italic_font = "Iosevka Fixed Italic";
+      bold_italic_font = "Iosevka Fixed Bold Italic";
 
       enable_audio_bell = false;
       scrollback_lines = 10000;

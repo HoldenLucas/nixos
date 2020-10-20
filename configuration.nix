@@ -5,8 +5,8 @@ let
     "https://github.com/NixOS/nixpkgs-channels/archive/nixos-unstable.tar.gz";
 in {
   imports = [
-    # ./hardware-configuration.nix
-    # <nixos-hardware/lenovo/thinkpad/x1/6th-gen>
+    ./hardware-configuration.nix
+    <nixos-hardware/lenovo/thinkpad/x1/6th-gen>
     (import "${
         builtins.fetchTarball
         "https://github.com/rycee/home-manager/archive/master.tar.gz"

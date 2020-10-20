@@ -1,26 +1,16 @@
 { pkgs, config, ... }: {
   fonts = {
     enableDefaultFonts = true;
-    fontconfig.defaultFonts.monospace = [ "Fira Code" ];
-    fonts = with pkgs; [ iosevka-term ];
+    fontconfig.defaultFonts.monospace = [ "Iosevka Fixed" ];
+    fonts = with pkgs; [ iosevka-fixed ];
   };
 
   nixpkgs = {
     config.packageOverrides = pkgs: {
-      iosevka-term = pkgs.iosevka.override {
-        set = "term";
+      iosevka-fixed = pkgs.iosevka.override {
+        set = "fixed";
         privateBuildPlan = {
-          family = "Iosevka Term";
-          design = [
-            "sp-fixed"
-            "v-l-italic"
-            "v-i-italic"
-            "v-g-singlestorey"
-            "v-zero-dotted"
-            "v-asterisk-high"
-            "v-at-long"
-            "v-brace-straight"
-          ];
+          family = "Iosevka Fixed";
         };
       };
     };

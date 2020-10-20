@@ -8,7 +8,7 @@ in {
     enable = true;
 
     config = rec {
-      fonts = [ "Iosevka Term 16" ];
+      fonts = [ "Iosevka Fixed 16" ];
 
       assigns = {
         "2" = [
@@ -19,7 +19,7 @@ in {
       };
 
       bars = [{
-        fonts = [ "FontAwesome 10" "Iosevka Term 14" ];
+        fonts = [ "FontAwesome 10" "Iosevka Fixed 14" ];
         mode = "hide";
         position = "top";
       }];
@@ -214,7 +214,7 @@ in {
       input 2:10:TPPS/2_Elan_TrackPoint {
         dwt enabled # disable-while-typing
         tap disabled
-        # scroll_factor .5
+        scroll_factor .6
         pointer_accel -0.7
       }
       input * {
