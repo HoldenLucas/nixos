@@ -83,7 +83,8 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 """""""""""
 """ fzf """
 """""""""""
-nmap <Leader>f :Files <CR>
+" runs :GFiles if inside a git directory                                                                                                                                                                                 
+nmap <expr> <Leader>f (len(system('git rev-parse')) ? ':Files' : ':GFiles')."\<CR>"
 nmap <Leader>t :Buffers<CR>
 
 """"""""""""""""
